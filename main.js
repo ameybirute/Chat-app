@@ -42,7 +42,7 @@ function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({ '&':'&amp;
 function escapeAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
 function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
 
-const emojiContainer = ["😀","😃","😂","😍","😮","😢","👍","🔥","🚀","👏"];
+const emojiContainer = ["😂","👍","❤️"];
 emojiContainer.forEach(e=>{
   const s=document.createElement("span");
   s.textContent=e;
@@ -145,7 +145,7 @@ function renderMessage(id,msg){
   el.className = "msg-row";
   const mine = msg.userId && currentUid && msg.userId===currentUid;
   if(mine) el.classList.add("me");
-  el.innerHTML = `<div class="avatar">${escapeHtml(msg.avatar||PRESET_AVATARS[0])}</div><div class="bubble"><div class="meta"><div class="username">${escapeHtml(msg.name||"Guest")}</div><div class="time">${new Date(msg.ts).toLocaleTimeString()}</div></div><div class="text">${escapeHtml(msg.text||"")}${msg.img?`<img src="${escapeAttr(msg.img)}" class="img-preview">`:''}</div><div class="reaction-bar" data-id="${id}"></div>${mine?`<div style="margin-top:8px;display:flex;gap:8px"><button class="icon-btn" onclick="promptEdit('${id}')">Edit</button><button class="icon-btn" onclick="deleteMessage('${id}')">Delete</button></div>`:""}</div>`;
+  el.innerHTML = `<div class="avatar">${escapeHtml(msg.avatar||PRESET_AVATARS[0])}</div><div class="bubble"><div class="meta"><div class="username">${escapeHtml(msg.name||"Guest")}</div><div class="time">${new Date(msg.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div></div><div class="text">${escapeHtml(msg.text||"")}${msg.img?`<img src="${escapeAttr(msg.img)}" class="img-preview">`:''}</div><div class="reaction-bar" data-id="${id}"></div>${mine?`<div style="margin-top:8px;display:flex;gap:8px"><button class="icon-btn" onclick="promptEdit('${id}')">Edit</button><button class="icon-btn" onclick="deleteMessage('${id}')">Delete</button></div>`:""}</div>`;
   if(!exist) messagesEl.appendChild(el);
   updateReactionsUI(id,msg.reactions||{});
   attachReactionHandlers(id);
