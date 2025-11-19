@@ -53,7 +53,6 @@ PRESET_AVATARS.forEach(a=>{
 
 gifBtn.onclick=()=>toggleGifPanel();
 
-function toggleEmojiPicker(show){ emojiPicker.style.display = show===undefined ? (emojiPicker.style.display==="flex" ? "none" : "flex") : (show ? "flex" : "none"); emojiPicker.style.flexWrap="wrap"; }
 function toggleGifPanel(){ gifPanel.style.display = gifPanel.style.display==="flex" ? "none" : "flex"; if(gifPanel.style.display==="flex") giphySearch.focus(); }
 
 sendBtn.onclick=sendMessage;
