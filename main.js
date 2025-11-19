@@ -111,6 +111,10 @@ function loadGifs(){
   });
 }
 
+document.getElementById("closeGif").addEventListener("click", () => {
+  document.getElementById("gifPanel").style.display = "none";
+});
+
 function sendMessage(){
   const now = Date.now();
   if(now - lastSent < sendCooldown) return;
