@@ -42,15 +42,6 @@ function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({ '&':'&amp;
 function escapeAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
 function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
 
-const emojiContainer = ["😂","👍","❤️"];
-emojiContainer.forEach(e=>{
-  const s=document.createElement("span");
-  s.textContent=e;
-  s.style.cursor="pointer";
-  s.style.fontSize="20px";
-  s.onclick=()=>{ messageInput.value += e; toggleEmojiPicker(false) };
-  emojiPicker.appendChild(s);
-});
 
 PRESET_AVATARS.forEach(a=>{
   const btn = document.createElement("div");
@@ -60,7 +51,6 @@ PRESET_AVATARS.forEach(a=>{
   document.getElementById("avatarGrid").appendChild(btn);
 });
 
-emojiBtn.onclick=()=>toggleEmojiPicker();
 gifBtn.onclick=()=>toggleGifPanel();
 
 function toggleEmojiPicker(show){ emojiPicker.style.display = show===undefined ? (emojiPicker.style.display==="flex" ? "none" : "flex") : (show ? "flex" : "none"); emojiPicker.style.flexWrap="wrap"; }
