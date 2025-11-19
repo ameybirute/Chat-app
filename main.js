@@ -37,8 +37,8 @@ const miniAvatar = document.getElementById("miniAvatar");
 const typingArea = document.getElementById("typingArea");
 const whoTyping = document.getElementById("whoTyping");
 const reactorsPopup = document.getElementById("reactorsPopup");
-const messagesDiv = document.getElementById("messages");
 const scrollBtn = document.getElementById("scrollDownBtn");
+const msgBox = document.getElementById("messages");
 
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 function escapeAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
@@ -87,20 +87,24 @@ firebase.auth().onAuthStateChanged(u=>{
 
 
 function scrollToBottom() {
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  msgBox.scrollTo({ top: msgBox.scrollHeight, behavior: "smooth" });
 }
 
 scrollBtn.addEventListener("click", scrollToBottom);
 
-messagesDiv.addEventListener("scroll", () => {
-  const atBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 10;
-
-  if (atBottom) {
-    scrollBtn.style.display = "none";
-  } else {
-    scrollBtn.style.display = "block";
-  }
+msgBox.addEventListener("scroll", () => {
+  const nearBottom = msgBox.scrollHeight - msgBox.scrollTop - msgBox.clientHeight < 80;
+  scrollBtn.style.display = nearBottom ? "none" : "block";
 });
+
+function autoScroll() {
+  const msgBox = document.getElementById("messages");
+  msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+scrollBtn.onclick = () => {
+  autoScroll();
+};
 
 
 function saveProfile(){

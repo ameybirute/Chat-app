@@ -33,6 +33,9 @@
     .left-actions{display:flex;gap:8px;align-items:center}
     .icon-btn{background:#fff;border:1px solid #eee;padding:8px;border-radius:8px;cursor:pointer}
     .send-btn{background:var(--accent);color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer}
+    #scrollDownBtn {position: absolute;bottom: 90px;left: 50%;transform: translateX(-50%);padding: 10px 14px;background: var(--accent);color: #fff;border: none;border-radius: 50px;cursor: pointer;display: none;font-size: 18px;z-index: 30;box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+    .chat {position: relative;}
     .emoji-picker{position:fixed;right:16px;bottom:92px;background:#fff;border:1px solid #eee;border-radius:10px;padding:8px;display:none;gap:6px;flex-wrap:wrap;max-width:220px;z-index:50}
     .gif-panel{position:fixed;right:16px;bottom:92px;background:#fff;border:1px solid #eee;border-radius:10px;padding:8px;display:none;flex-direction:column;width:320px;max-height:56vh;overflow:auto;z-index:50}
     .gif-row{display:flex;gap:8px;flex-wrap:wrap}
@@ -71,13 +74,12 @@
     </div>
   </div>
 
-  <button id="scrollDownBtn" style="position: fixed;bottom: 90px; right: 20px;padding: 10px 14px;border-radius: 50%;border: none;background:#2563eb;color: white;font-size: 20px;cursor: pointer;display: none;box-shadow: 0 2px 6px rgba(0,0,0,0.2);z-index: 200;
-">↓</button>
 
   <div class="container">
     <div class="chat">
       <div id="messages"></div>
       <div id="typingArea" class="typing"></div>
+      <button id="scrollDownBtn" class="scroll-btn">↓</button>
       <div class="controls">
         <div class="input">
           <textarea id="messageInput" placeholder="Message"></textarea>
