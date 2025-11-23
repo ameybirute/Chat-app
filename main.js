@@ -32,7 +32,6 @@ const selectedGifPreview = document.getElementById("selectedGifPreview");
 const profileModal = document.getElementById("profileModal");
 const setProfileBtn = document.getElementById("setProfileBtn");
 const displayNameInput = document.getElementById("displayName");
-const profileAvatarPreview = document.getElementById("miniAvatar");
 const miniAvatar = document.getElementById("miniAvatar");
 const typingArea = document.getElementById("typingArea");
 const whoTyping = document.getElementById("whoTyping");
@@ -63,7 +62,6 @@ messageInput.addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.shiftKey){
 setProfileBtn.onclick=()=>profileModal.style.display="block";
 document.getElementById("closeProfile").onclick=()=>profileModal.style.display="none";
 document.getElementById("saveProfile").onclick=saveProfile;
-miniAvatar.onclick=()=>profileModal.style.display="block";
 
 giphySearch.oninput=debounce(loadGifs,350);
 
@@ -114,7 +112,6 @@ function saveProfile(){
   profile.displayName = name;
   profile.avatar = avatar;
   db.ref(`users/${currentUid}`).set(profile).then(()=>{
-    miniAvatar.textContent = profile.avatar;
     profileModal.style.display = "none";
   });
 }
