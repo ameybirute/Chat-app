@@ -19,7 +19,7 @@
     #messages{flex:1;overflow:auto;padding-right:6px;display:flex;flex-direction:column;gap:12px}
     .msg-row{display:flex;gap:10px;align-items:flex-start;max-width:85%}
     .msg-row.me{margin-left:auto}
-    .avatar{width:44px;height:44px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#f0f2f5;display:flex;align-items:center;justify-content:center;font-size:22px}
+    .avatar{width:44px;height:44px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
     .bubble{background:#fff;border-radius:12px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.03);max-width:100%}
     .meta{display:flex;align-items:center;gap:8px;margin-bottom:6px}
     .username{font-weight:600;font-size:14px}
@@ -62,6 +62,67 @@
       .topbar{padding:8px}
       textarea{min-height:56px}
     }
+
+body.dark {
+  background: #0d1117;
+  color: #e6e6e6;
+}
+
+body.dark .topbar {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+body.dark .chat {
+  background: #0d1117;
+}
+
+body.dark .bubble {
+  background: #161b22;
+  color: #e6e6e6;
+}
+
+body.dark textarea {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: white;
+}
+
+body.dark .icon-btn,
+body.dark .send-btn,
+body.dark .avatar-btn {
+  background: #21262d;
+  color: white;
+  border: 1px solid #30363d;
+}
+
+body.dark #scrollDownBtn {
+  background: #2563eb;
+}
+
+body.dark .gif-panel,
+body.dark .emoji-picker,
+body.dark .profile-modal {
+  background: #161b22;
+  border: 1px solid #30363d;
+}
+
+body.dark .reaction-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: white;
+}
+
+body.dark .avatar {
+  background-color: #171b21;
+}
+
+body.dark .avatar-option,
+body.dark #profileAvatarPreview {
+  background-color: #0e1116;
+  padding: 4px;
+}
+
   </style>
 </head>
 <body>
@@ -69,6 +130,7 @@
     <div class="brand">General Chat</div>
     <div class="profile">
       <div id="whoTyping" class="small"></div>
+      <button id="themeToggle" class="icon-btn">🌙</button>
       <div class="avatar-btn" id="miniAvatar">🦊</div>
       <button id="setProfileBtn" class="icon-btn">Profile</button>
     </div>

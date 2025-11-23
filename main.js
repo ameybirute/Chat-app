@@ -245,3 +245,20 @@ function promptEdit(id){ db.ref(`messages/${id}`).once('value').then(snap=>{ con
 
 function deleteMessage(id){ if(!confirm("Delete?")) return; db.ref(`messages/${id}`).remove(); }
 
+const themeToggle = document.getElementById("themeToggle");
+
+if (!localStorage.getItem("theme")) {
+  localStorage.setItem("theme", "dark");
+}
+
+document.body.classList.toggle("dark", localStorage.getItem("theme") === "dark");
+themeToggle.textContent = localStorage.getItem("theme") === "dark" ? "🌙" : "☀️";
+
+themeToggle.onclick = () => {
+  const newTheme = localStorage.getItem("theme") === "dark" ? "light" : "dark";
+  localStorage.setItem("theme", newTheme);
+  document.body.classList.toggle("dark", newTheme === "dark");
+  themeToggle.textContent = newTheme === "dark" ? "🌙" : "☀️";
+};
+
+
