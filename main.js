@@ -16,7 +16,6 @@ let profile = { displayName: "", avatar: "" };
 let lastSent = 0;
 let sendCooldown = 1000;
 let typingTimeout = 4000;
-const CUSTOM_EMOJIS = ["🔥","😂","❤️","👍","👀"];
 const PRESET_AVATARS = ["🦊","🐼","🐵","🐯","🐰","🦁","🐸","🐨","🐶","🐱"];
 
 const emojiPicker = document.getElementById("emojiPicker");
@@ -83,6 +82,25 @@ firebase.auth().onAuthStateChanged(u=>{
   loadInitialMessages();
 });
 
+let isAdmin = false;
+
+db.ref(`users/${currentUid}`).on("value", snap => {
+  const data = snap.val() || {};
+  isAdmin = data.role === "admin";
+});
+
+const adminBtn = document.getElementById("adminBtn");
+
+setInterval(() => {
+  if (isAdmin) {
+    adminBtn.style.display = "block";
+  }
+}, 1000);
+
+adminBtn.onclick = () => {
+  window.location.href = "admin.html";
+};
+
 
 function scrollToBottom() {
   msgBox.scrollTo({ top: msgBox.scrollHeight, behavior: "smooth" });
@@ -144,6 +162,12 @@ function sendMessage(){
   lastSent = now;
   const msg = { userId: currentUid, name: profile.displayName, avatar: profile.avatar, text: text, img: selectedGifUrl||"", ts: Date.now(), reactions: {} };
   db.ref("messages").push(msg).then(()=>{ messageInput.value=""; selectedGifPreview.innerHTML=""; selectedGifUrl=""; sendTyping(true); });
+  db.ref(`banned/${currentUid}`).once("value").then(s => {
+  if (s.exists()) {
+    alert("You are banned from sending messages.");
+    return;
+  }
+});
 }
 
 function loadInitialMessages(){
@@ -156,15 +180,11 @@ function renderMessage(id, msg) {
   const last = messagesEl.lastElementChild;
   const isMine = msg.userId === currentUid;
 
-  // Format time
   const timeString = new Date(msg.ts).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit"
   });
 
-  // =====================================================
-  //     If previous message is same user → append
-  // =====================================================
   if (last && last.dataset.uid === msg.userId) {
     const textDiv = last.querySelector(".text");
 
@@ -182,9 +202,6 @@ function renderMessage(id, msg) {
     return;
   }
 
-  // =====================================================
-  //        Otherwise → NEW message bubble
-  // =====================================================
   const el = document.createElement("div");
   el.id = "m-" + id;
   el.dataset.uid = msg.userId;
