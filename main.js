@@ -152,19 +152,82 @@ function loadInitialMessages(){
   db.ref("messages").on("child_removed",snap=>{ const el=document.getElementById("m-"+snap.key); if(el) el.remove(); });
 }
 
-function renderMessage(id,msg){
-  const exist = document.getElementById("m-"+id);
-  const el = exist || document.createElement("div");
-  el.id = "m-"+id;
+function renderMessage(id, msg) {
+  const last = messagesEl.lastElementChild;
+  const isMine = msg.userId === currentUid;
+
+  // Format time
+  const timeString = new Date(msg.ts).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  // =====================================================
+  //     If previous message is same user → append
+  // =====================================================
+  if (last && last.dataset.uid === msg.userId) {
+    const textDiv = last.querySelector(".text");
+
+    const wrap = document.createElement("div");
+    wrap.className = "sub-msg";
+    wrap.dataset.ts = timeString;
+
+    wrap.innerHTML = `
+      ${escapeHtml(msg.text || "")}
+      ${msg.img ? `<img src="${escapeAttr(msg.img)}" class="img-preview">` : ""}
+    `;
+
+    textDiv.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return;
+  }
+
+  // =====================================================
+  //        Otherwise → NEW message bubble
+  // =====================================================
+  const el = document.createElement("div");
+  el.id = "m-" + id;
+  el.dataset.uid = msg.userId;
   el.className = "msg-row";
-  const mine = msg.userId && currentUid && msg.userId===currentUid;
-  if(mine) el.classList.add("me");
-  el.innerHTML = `<div class="avatar">${escapeHtml(msg.avatar||PRESET_AVATARS[0])}</div><div class="bubble"><div class="meta"><div class="username">${escapeHtml(msg.name||"Guest")}</div><div class="time">${new Date(msg.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div></div><div class="text">${escapeHtml(msg.text||"")}${msg.img?`<img src="${escapeAttr(msg.img)}" class="img-preview">`:''}</div><div class="reaction-bar" data-id="${id}"></div>${mine?`<div style="margin-top:8px;display:flex;gap:8px"><button class="icon-btn" onclick="promptEdit('${id}')">Edit</button><button class="icon-btn" onclick="deleteMessage('${id}')">Delete</button></div>`:""}</div>`;
-  if(!exist) messagesEl.appendChild(el);
-  updateReactionsUI(id,msg.reactions||{});
+  if (isMine) el.classList.add("me");
+
+  el.innerHTML = `
+    <div class="avatar">${escapeHtml(msg.avatar || PRESET_AVATARS[0])}</div>
+
+    <div class="bubble">
+      <div class="meta">
+        <div class="username">${escapeHtml(msg.name || "Guest")}</div>
+        <div class="time main-time">${timeString}</div>
+      </div>
+
+      <div class="text">
+        <div class="sub-msg" data-ts="${timeString}">
+          ${escapeHtml(msg.text || "")}
+          ${msg.img ? `<img src="${escapeAttr(msg.img)}" class="img-preview">` : ""}
+        </div>
+      </div>
+
+      <div class="reaction-bar" data-id="${id}"></div>
+
+      ${
+        isMine
+          ? `<div style="margin-top:8px;display:flex;gap:8px">
+              <button class="icon-btn" onclick="promptEdit('${id}')">Edit</button>
+              <button class="icon-btn" onclick="deleteMessage('${id}')">Delete</button>
+             </div>`
+          : ""
+      }
+    </div>
+  `;
+
+  messagesEl.appendChild(el);
+  updateReactionsUI(id, msg.reactions || {});
   attachReactionHandlers(id);
+
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
+
+
 
 function attachReactionHandlers(id){
   const bar = document.querySelector(`[data-id="${id}"]`);
