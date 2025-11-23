@@ -70,6 +70,9 @@ firebase.auth().signInAnonymously().catch(()=>{});
 firebase.auth().onAuthStateChanged(u=>{
   if(!u) return;
   currentUid = u.uid;
+  if (currentUid === "c1zvLYWQjNVFObUOKuiWvyxjZhS2" || "vM9OvAYJPleQWfbfPdWbu8YGAr52") {
+  document.getElementById("adminBtn").style.display = "block";
+}
   db.ref(`users/${currentUid}`).once("value").then(snap=>{
     const p = snap.val() || {};
     profile.displayName = p.displayName || generateGuestName();
