@@ -101,7 +101,7 @@ setInterval(() => {
 }, 1000);
 
 adminBtn.onclick = () => {
-  window.location.href = "admin.html";
+  window.open('admin.html','_blank');
 };
 
 
