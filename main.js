@@ -37,6 +37,10 @@ const whoTyping = document.getElementById("whoTyping");
 const reactorsPopup = document.getElementById("reactorsPopup");
 const scrollBtn = document.getElementById("scrollDownBtn");
 const msgBox = document.getElementById("messages");
+const ADMINS = [
+  "c1zvLYWQjNVFObUOKuiWvyxjZhS2", 
+  "vM9OvAYJPleQWfbfPdWbu8YGAr52"
+];
 
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 function escapeAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
@@ -67,20 +71,25 @@ giphySearch.oninput=debounce(loadGifs,350);
 function generateGuestName(){ return "Guest"+Math.floor(Math.random()*9000+1000); }
 
 firebase.auth().signInAnonymously().catch(()=>{});
-firebase.auth().onAuthStateChanged(u=>{
-  if(!u) return;
+firebase.auth().onAuthStateChanged(u => {
+  if (!u) return;
   currentUid = u.uid;
-  if (currentUid === "c1zvLYWQjNVFObUOKuiWvyxjZhS2" || "vM9OvAYJPleQWfbfPdWbu8YGAr52") {
-  document.getElementById("adminBtn").style.display = "block";
-}
-  db.ref(`users/${currentUid}`).once("value").then(snap=>{
+
+  if (ADMINS.includes(currentUid)) {
+    document.getElementById("adminBtn").style.display = "block";
+  } else {
+    document.getElementById("adminBtn").style.display = "none";
+  }
+
+  db.ref(`users/${currentUid}`).once("value").then(snap => {
     const p = snap.val() || {};
     profile.displayName = p.displayName || generateGuestName();
     profile.avatar = p.avatar || PRESET_AVATARS[0];
     displayNameInput.value = profile.displayName;
-    miniAvatar.textContent = profile.avatar;
+    if (miniAvatar) miniAvatar.textContent = profile.avatar;
     db.ref(`users/${currentUid}`).update(profile);
   });
+
   listenTyping();
   loadInitialMessages();
 });
